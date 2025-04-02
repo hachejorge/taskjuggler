@@ -68,8 +68,8 @@ task WMGame "Web & Mobile Game" {
       allocate dev1
     }
     task tlogic "Game logic" {
-      effort 12d
-      actual:effort 11d
+      effort 8d
+      actual:effort 7d
       allocate dev1, dev2
       depends WMGame.tback.tBEd
     }
