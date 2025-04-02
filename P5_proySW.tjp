@@ -2,350 +2,12 @@
  * This file contains the practice 5 source code corresponding with the 
  * project planification using TaskJuggler in the "Proyecto Software" course.
  * It is based on the Tutorial project offered by TaskJuggler and maintains 
- * some elements of it 
- */
-
-project pSix "Web Game"  2024-12-15 +5m {
-  # Set the default time zone for the project. If not specified, UTC
-  # is used. 
-  timezone "Europe/Paris"
-  timeformat "%Y-%m-%d"
-  numberformat "-" "" "." "," 2
-  currencyformat "-" "" "." "," 2
-  now 2025-04-25-13:00
-  currency "EUR"
-
-  scenario plan "Plan" {
-    scenario actual "Actual"
-  }
-}
-
-copyright "Creative Commons 2025 Proyecto Software - Unizar."
-rate 145.2
-
-account cost "Project Cost" {
-  account manag "Management"
-  account wFront "Web Front-End"
-  account mFront "Mobile Front-end"
-  account back "Back-End"
-}
-account rev "Payments"
-balance cost rev
-
-resource boss "Liz Bullock" {
-  email "iiii@unizar.es"
-  actual:leaves project 2025-04-07 - 2025-05-12
-  rate 160
-}
-resource dev1 "Paul Smith" {
-  email "hhhh@unizar.es"
-}
-resource dev2 "Samantha Müller" {
-  email "jjj@unizar.es"
-  rate 100
-  actual:leaves project 2025-05-01 - 2025-05-28
-}
-resource dev3 "Peter Green" {
-  email "kkk@unizar.es"
-}
-
-task WMGame "Web & Mobile Game" {
-  chargeset manag
-  charge 60 perday
-  responsible boss
-
-  task tgdesign "General System Design" {
-      effort 2d
-      allocate boss
-      depends WMGame.deliveries.start
-  }
-
-  task tback "Back End" {
-    purge chargeset
-    chargeset back
-    responsible dev1
-    depends WMGame.tgdesign
-    task tBEd "Back End General Design" {
-      effort 5d
-      allocate dev1
-    }
-    task tlogic "Game logic" {
-      effort 8d
-      actual:effort 7d
-      allocate dev1, dev2
-      depends WMGame.tback.tBEd
-    }
-    task tbackDev "Back development" {
-      effort 12d
-      allocate dev1, dev2
-      depends WMGame.tback.tlogic
-    }
-  }
-
-  task tmobF "Mobile Front End" {
-    purge chargeset
-    chargeset mFront
-    responsible dev1
-    depends WMGame.tback.tBEd
-    task tMobGUId "Mobile GUI Design" {
-      effort 5d
-      actual:effort 6d
-      allocate dev1
-    }
-    task tMobFEc "Mobile Front End Construction" {
-      effort 12d
-      allocate dev1, dev2
-      depends WMGame.tmobF.tMobGUId
-    }
-    task tFEt "Web Front End Test" {
-      effort 3d
-      allocate dev1
-      depends WMGame.tmobF.tMobFEc
-    }    
-  }
-
-  task twebF "Web Front End" {
-    purge chargeset
-    chargeset wFront
-    responsible dev3
-    depends WMGame.tback.tBEd
-    task tGUId "Web GUI Design" {
-      effort 3d  
-      actual:effort 4d
-      allocate dev3, dev1  # Asignamos más recursos
-    }
-    task tFEc "Web Front End Construction" {
-      effort 4d  # Reducido de 5d a 4d
-      allocate dev2, dev3  # Asignamos más recursos
-      depends WMGame.twebF.tGUId
-    }
-    task tFEt "Web Front End Test" {
-      effort 2d
-      allocate dev1
-      depends WMGame.twebF.tFEc
-    }    
-  }
-
-
-  task ttest "Acceptance tests" {
-    effort 10d
-    allocate boss
-    allocate dev2
-    actual:effort 20d
-    depends WMGame.twebF
-    depends WMGame.tback
-    depends WMGame.tmobF
-    minstart 2025-05-30
-  }
-
-  task backDeploy "Backend cloud deployment" {
-    allocate boss 
-    allocate dev1
-    depends WMGame.tback
-    task tEvaluateDeploymentOptions "Choose cloud deployment" {
-      effort 3d
-      actual: effort 2d
-    }
-    task tCompleteDeploy "Cloud complete deployment" {
-      effort 3d
-      actual: effort 2d
-    }
-  }
-
-  task deliveries "Milestones" {
-    purge chargeset
-    chargeset rev
-
-    task start "Project start" {
-      start ${projectstart}
-      charge 13000.0 onstart
-    }
-
-    task done "Ship Product to Customer" {
-      depends WMGame.ttest
-      charge 12000.0 onstart
-    }
-  }
-}
-
-# Now the project has been specified completely. Stopping here would
-# result in a valid TaskJuggler file that could be processed and
-# scheduled. But no reports would be generated to visualize the
-# results.
-
-navigator navbar {
-  hidereport @none
-}
-
-macro TaskTip [
-  tooltip istask() -8<-
-    '''Start: ''' <-query attribute='start'->
-    '''End: ''' <-query attribute='end'->
-    ----
-    '''Resources:'''
-
-    <-query attribute='resources'->
-    ----
-    '''Precursors: '''
-
-    <-query attribute='precursors'->
-    ----
-    '''Followers: '''
-
-    <-query attribute='followers'->
-    ->8-
-]
-
-textreport frame "" {
-  header -8<-
-    == Accounting Project Web Game ==
-    <[navigator id="navbar"]>
-  ->8-
-  footer "----"
-
-  textreport overvi "Overview" {
-    formats html
-    center '<[report id="overview"]>'
-  }
-  
-  textreport "Status" {
-    formats html
-    center -8<-
-      <[report id="status.dashboard"]>
-      ----
-      <[report id="status.completed"]>
-      ----
-      <[report id="status.ongoing"]>
-      ----
-      <[report id="status.future"]>
-    ->8-
-  }
-
-  textreport development "Development" {
-    formats html
-    center '<[report id="development"]>'
-  }
-
-  textreport "ContactList" {
-    formats html
-    title "Contact List"
-    center '<[report id="contactList"]>'
-  }
-  textreport "ResourceGraph" {
-    formats html
-    title "Resource Graph"
-    center '<[report id="resourceGraph"]>'
-  }
-}
-
-# A traditional Gantt chart with a project overview.
-taskreport overview "" {
-  scenarios actual
-  headline "Current Project Plan"
-  columns bsi { title 'WBS' },
-          name, start, end, effort, cost,
-          revenue, chart { ${TaskTip} }
-  # For this report we like to have the abbreviated weekday in front
-  # of the date. %a is the tag for this.
-  timeformat "%a %Y-%m-%d"
-  loadunit days
-  hideresource @all
-  balance cost rev
-  caption 'All effort values are in man days.'
-}
-
-
-# Macro to set the background color of a cell according to the alert
-# level of the task.
-macro AlertColor [
-  cellcolor plan.alert = 0 "#00D000" # green
-  cellcolor plan.alert = 1 "#D0D000" # yellow
-  cellcolor plan.alert = 2 "#D00000" # red
-]
-
-taskreport status "" {
-  columns bsi { width 50 title 'WBS' }, name { width 150 },
-          start { width 100 }, end { width 100 },
-          effort { width 100 },
-          alert { tooltip plan.journal
-                          != '' "<-query attribute='journal'->" width 150 },
-          status { width 150 }
-  scenarios actual
-
-  taskreport dashboard "" {
-    headline "Project Dashboard (<-query attribute='now'->)"
-    columns name { title "Task" ${AlertColor} width 200},
-            resources { width 200 ${AlertColor}
-                        listtype bullets
-                        listitem "<-query attribute='name'->"
-                        start ${projectstart} end ${projectend} },
-            alerttrend { title "Trend" ${AlertColor} width 50 },
-            journal { width 350 ${AlertColor} }
-    journalmode status_up
-    journalattributes headline, author, date, summary, details
-    hidetask ~hasalert(0)
-    sorttasks alert.down, actual.end.up
-    period %{${now} - 10w} +10w
-  }
-  taskreport completed "" {
-    headline "Already completed tasks"
-    hidetask ~(actual.end <= ${now})
-  }
-  taskreport ongoing "" {
-    headline "Ongoing tasks"
-    hidetask ~((actual.start <= ${now}) & (actual.end > ${now}))
-  }
-  taskreport future "" {
-    headline "Future tasks"
-    hidetask ~(actual.start > ${now})
-  }
-}
-
-# A list of tasks showing the resources assigned to each task.
-taskreport development "" {
-  scenarios actual
-  headline "Development - Resource Allocation Report"
-  columns bsi { title 'WBS' }, name, start, end, effort { title "Work" },
-          duration, chart { ${TaskTip} scale day width 500 }
-  timeformat "%Y-%m-%d"
-  hideresource ~(isleaf() & isleaf_())
-  sortresources name.up
-}
-
-# A list of all employees with their contact details.
-resourcereport contactList "" {
-  scenarios actual
-  headline "Contact list and duty plan"
-  columns name,
-          email { celltext 1 "[mailto:<-email-> <-email->]" },
-          managers { title "Manager" },
-          chart { scale day }
-  hideresource ~isleaf()
-  sortresources name.up
-  hidetask @all
-}
-
-# A graph showing resource allocation. It identifies whether each
-# resource is under- or over-allocated for.
-resourcereport resourceGraph "" {
-  scenarios actual
-  headline "Current Resource Allocation Graph"
-  columns no, name, effort, rate, weekly { ${TaskTip} }
-  loadunit shortauto
-  # We only like to show leaf tasks for leaf resources.
-  hidetask ~(isleaf() & isleaf_())
-  sorttasks plan.start.up
-}
-/*
- * This file contains the practice 5 source code corresponding with the 
- * project planification using TaskJuggler in the "Proyecto Software" course.
- * It is based on the Tutorial project offered by TaskJuggler and maintains 
  * some elements of it
  */
 
-project pSix "Web Game"  2024-12-15 +5m {
+project pSix "Web Game"  2025-04-02 +5m {
   # Set the default time zone for the project. If not specified, UTC
-  # is used. 
+  # is used.
   timezone "Europe/Paris"
   # Hide the clock time. Only show the date.
   timeformat "%Y-%m-%d"
@@ -401,7 +63,7 @@ resource dev1 "Paul Smith" {
 resource dev2 "Samantha Müller" {
   email "jjj@unizar.es"
   rate 100
-  actual:leaves project 2025-02-01 - 2025-02-28
+  actual:leaves project 2025-52-01 - 2025-05-28
 }
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
@@ -485,6 +147,33 @@ task WMGame "Web & Mobile Game" {
     }    
   }
 
+  task tMobF "Mobile Front End" {
+    purge chargeset
+    chargeset wFront
+    responsible dev3
+    depends WMGame.tback.tBEd
+    task tGUIMobd "Web GUI Design" {
+      effort 9d
+      actual:effort 15d
+      allocate dev3
+      journalentry 2025-04-02 "The mobile desgin is done" {
+        author dev3
+        alert green
+        summary "The tool used for the GUI design was really useful."
+      }
+    }
+    task tFMobC "Web Front End Construction" {
+      effort 15d
+      allocate dev2, dev3
+      depends WMGame.tMobF.tGUIMobd
+    }
+    task tFMobt "Web Front End Test" {
+      effort 6d
+      allocate dev1
+      depends WMGame.tMobF.tFMobC
+    }    
+  }
+
   task ttest "Acceptance tests" {
       effort 10d
       allocate boss
@@ -492,6 +181,7 @@ task WMGame "Web & Mobile Game" {
       actual:effort 20d
       depends WMGame.twebF
       depends WMGame.tback
+      depends WMGame.tMobF
       }
 
     
