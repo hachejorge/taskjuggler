@@ -182,6 +182,7 @@ task WMGame "Web & Mobile Game" {
     depends WMGame.twebF
     depends WMGame.tback
     depends WMGame.tmobF
+    start 2025-05-15
   }
 
   task backDeploy "Backend cloud deployment" {
