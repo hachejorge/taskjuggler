@@ -108,13 +108,13 @@ task WMGame "Web & Mobile Game" {
     responsible dev3
     depends WMGame.tback.tBEd
     task tGUId "Web GUI Design" {
-      effort 7d
-      actual:effort 8d
-      allocate dev3
+      effort 3d  
+      actual:effort 4d
+      allocate dev3, dev1  # Asignamos más recursos
     }
     task tFEc "Web Front End Construction" {
-      effort 5d
-      allocate dev2, dev3
+      effort 4d  # Reducido de 5d a 4d
+      allocate dev2, dev3  # Asignamos más recursos
       depends WMGame.twebF.tGUId
     }
     task tFEt "Web Front End Test" {
@@ -123,6 +123,7 @@ task WMGame "Web & Mobile Game" {
       depends WMGame.twebF.tFEc
     }    
   }
+
 
   task ttest "Acceptance tests" {
     effort 10d
