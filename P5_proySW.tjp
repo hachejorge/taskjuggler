@@ -120,6 +120,33 @@ task WMGame "Web & Mobile Game" {
     }
   }
 
+  task tmobF "Mobile Front End" {
+    purge chargeset
+    chargeset mFront
+    responsible dev1
+    depends VMGame.tback.tBEd
+    task tMobGUId "Mobile GUI Design" {
+      effort 11d
+      actual:effort 12d
+      allocate dev1
+      journalentry 2025-02-15 "Problems with the GUI design tool"{
+        author dev1
+        alert orange
+        summary "The tool used for the GUI design has given me a lot of problems. I recommend to look for other one."
+      }
+    }
+    task tMobFEc "Mobile Front End Construction" {
+      effort 17d
+      allocate dev1, dev2
+      depends WMGame.tmobF.tMobGUId
+    }
+    task tFEt "Web Front End Test" {
+      effort 4d
+      allocate dev1
+      depends WMGame.tmobF.tMobFEc
+    }    
+  }
+
   task twebF "Web Front End" {
     purge chargeset
     chargeset wFront
@@ -148,13 +175,28 @@ task WMGame "Web & Mobile Game" {
   }
 
   task ttest "Acceptance tests" {
-      effort 10d
-      allocate boss
-      allocate dev2
-      actual:effort 20d
-      depends WMGame.twebF
-      depends WMGame.tback
-      }
+    effort 10d
+    allocate boss
+    allocate dev2
+    actual:effort 20d
+    depends WMGame.twebF
+    depends WMGame.tback
+    depends WMGame.tmobF
+  }
+
+  task backDeploy "Backend cloud deployment" {
+    allocate boss 
+    allocate dev1
+    depends VMGame.tback
+    task tEvaluateDeploymentOptions "Choose cloud deployment" {
+      effort 3d
+      actual: effort 2d
+    }
+    task tCompleteDeploy "Cloud complete deployment" {
+      effort 3d
+      actual: effort 2d
+    }
+  }
 
     
   task deliveries "Milestones" {
