@@ -4,6 +4,7 @@
  * It is based on the Tutorial project offered by TaskJuggler and maintains 
  * some elements of it 
  */
+
 project pSix "Web Game"  2025-04-02 +6m {
   timezone "Europe/Paris"
   timeformat "%Y-%m-%d"
@@ -11,6 +12,7 @@ project pSix "Web Game"  2025-04-02 +6m {
   currencyformat "-" "" "." "," 2
   now 2025-04-25-13:00
   currency "EUR"
+
   scenario plan "Plan" {
     scenario actual "Actual"
   }
@@ -51,7 +53,7 @@ task WMGame "Web & Mobile Game" {
   responsible boss
 
   task tgdesign "General System Design" {
-      effort 5d
+      effort 2d
       allocate boss
       depends WMGame.deliveries.start
   }
@@ -62,16 +64,17 @@ task WMGame "Web & Mobile Game" {
     responsible dev1
     depends WMGame.tgdesign
     task tBEd "Back End General Design" {
-      effort 6d
+      effort 5d
       allocate dev1
     }
     task tlogic "Game logic" {
-      effort 10d
+      effort 12d
+      actual:effort 11d
       allocate dev1, dev2
       depends WMGame.tback.tBEd
     }
     task tbackDev "Back development" {
-      effort 12d
+      effort 15d
       allocate dev1, dev2
       depends WMGame.tback.tlogic
     }
@@ -84,15 +87,16 @@ task WMGame "Web & Mobile Game" {
     depends WMGame.tback.tBEd
     task tMobGUId "Mobile GUI Design" {
       effort 5d
+      actual:effort 6d
       allocate dev1
     }
     task tMobFEc "Mobile Front End Construction" {
-      effort 10d
+      effort 12d
       allocate dev1, dev2
       depends WMGame.tmobF.tMobGUId
     }
     task tFEt "Web Front End Test" {
-      effort 4d
+      effort 3d
       allocate dev1
       depends WMGame.tmobF.tMobFEc
     }    
@@ -104,11 +108,12 @@ task WMGame "Web & Mobile Game" {
     responsible dev3
     depends WMGame.tback.tBEd
     task tGUId "Web GUI Design" {
-      effort 6d
+      effort 7d
+      actual:effort 8d
       allocate dev3
     }
     task tFEc "Web Front End Construction" {
-      effort 9d
+      effort 8d
       allocate dev2, dev3
       depends WMGame.twebF.tGUId
     }
@@ -121,21 +126,26 @@ task WMGame "Web & Mobile Game" {
 
   task ttest "Acceptance tests" {
     effort 10d
-    allocate boss, dev2
-    depends WMGame.twebF.tFEt
-    depends WMGame.tback.tbackDev
-    depends WMGame.tmobF.tFEt
+    allocate boss
+    allocate dev2
+    actual:effort 20d
+    depends WMGame.twebF
+    depends WMGame.tback
+    depends WMGame.tmobF
     start 2025-05-15
   }
 
   task backDeploy "Backend cloud deployment" {
-    allocate boss, dev1
-    depends WMGame.tback.tbackDev
+    allocate boss 
+    allocate dev1
+    depends WMGame.tback
     task tEvaluateDeploymentOptions "Choose cloud deployment" {
       effort 3d
+      actual: effort 2d
     }
     task tCompleteDeploy "Cloud complete deployment" {
       effort 3d
+      actual: effort 2d
     }
   }
 
@@ -154,7 +164,6 @@ task WMGame "Web & Mobile Game" {
     }
   }
 }
-
 
 # Now the project has been specified completely. Stopping here would
 # result in a valid TaskJuggler file that could be processed and
