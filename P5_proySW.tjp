@@ -131,7 +131,7 @@ task WMGame "Web & Mobile Game" {
       allocate dev1
       journalentry 2025-02-15 "Problems with the GUI design tool"{
         author dev1
-        alert orange
+        alert yellow
         summary "The tool used for the GUI design has given me a lot of problems. I recommend to look for other one."
       }
     }
