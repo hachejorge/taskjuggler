@@ -114,7 +114,7 @@ task WMGame "Web & Mobile Game" {
       }
     }
     task tbackDev "Back development" {
-      effort 20d
+      effort 15d
       allocate dev1, dev2
       depends WMGame.tback.tlogic
     }
@@ -126,8 +126,8 @@ task WMGame "Web & Mobile Game" {
     responsible dev1
     depends WMGame.tback.tBEd
     task tMobGUId "Mobile GUI Design" {
-      effort 11d
-      actual:effort 12d
+      effort 5d
+      actual:effort 6d
       allocate dev1
       journalentry 2025-04-10 "Problems with the GUI design tool"{
         author dev1
@@ -136,12 +136,12 @@ task WMGame "Web & Mobile Game" {
       }
     }
     task tMobFEc "Mobile Front End Construction" {
-      effort 17d
+      effort 12d
       allocate dev1, dev2
       depends WMGame.tmobF.tMobGUId
     }
     task tFEt "Web Front End Test" {
-      effort 4d
+      effort 3d
       allocate dev1
       depends WMGame.tmobF.tMobFEc
     }    
@@ -153,17 +153,17 @@ task WMGame "Web & Mobile Game" {
     responsible dev3
     depends WMGame.tback.tBEd
     task tGUId "Web GUI Design" {
-      effort 9d
-      actual:effort 15d
+      effort 7d
+      actual:effort 8d
       allocate dev3
-      journalentry 2025-04-12 "Problems with the GUI design tool" {
+      journalentry 2025-04-01 "The mobile UI design is done" {
         author dev3
-        alert yellow
-        summary "The tool used for the GUI design has given me a lot of problems. I recommend to look for other one."
+        alert green
+        summary "Thanks to this organization of Gantt I have managed to organize all the task and finished on time."
       }
     }
     task tFEc "Web Front End Construction" {
-      effort 15d
+      effort 10d
       allocate dev2, dev3
       depends WMGame.twebF.tGUId
     }
