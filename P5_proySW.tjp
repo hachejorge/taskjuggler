@@ -113,12 +113,12 @@ task WMGame "Web & Mobile Game" {
       allocate dev3
     }
     task tFEc "Web Front End Construction" {
-      effort 6d
+      effort 5d
       allocate dev2, dev3
       depends WMGame.twebF.tGUId
     }
     task tFEt "Web Front End Test" {
-      effort 3d
+      effort 2d
       allocate dev1
       depends WMGame.twebF.tFEc
     }    
