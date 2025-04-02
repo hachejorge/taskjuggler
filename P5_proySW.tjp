@@ -103,8 +103,8 @@ task WMGame "Web & Mobile Game" {
       allocate dev1
     }
     task tlogic "Game logic" {
-      effort 12d
-      actual:effort 11d
+      effort 8d
+      actual:effort 7d
       allocate dev1, dev2
       depends WMGame.tback.tBEd
       journalentry 2025-05-01 "Game logic completed before deadline" {
@@ -114,7 +114,7 @@ task WMGame "Web & Mobile Game" {
       }
     }
     task tbackDev "Back development" {
-      effort 20d
+      effort 10d
       allocate dev1, dev2
       depends WMGame.tback.tlogic
     }
@@ -127,7 +127,7 @@ task WMGame "Web & Mobile Game" {
     depends WMGame.tback.tBEd
     task tGUId "Web GUI Design" {
       effort 9d
-      actual:effort 15d
+      actual:effort 12d
       allocate dev3
       journalentry 2025-04-15 "Problems with the GUI design tool" {
         author dev3
@@ -136,12 +136,12 @@ task WMGame "Web & Mobile Game" {
       }
     }
     task tFEc "Web Front End Construction" {
-      effort 15d
+      effort 10d
       allocate dev2, dev3
       depends WMGame.twebF.tGUId
     }
     task tFEt "Web Front End Test" {
-      effort 6d
+      effort 3d
       allocate dev1
       depends WMGame.twebF.tFEc
     }    
@@ -153,8 +153,8 @@ task WMGame "Web & Mobile Game" {
     responsible dev3
     depends WMGame.tback.tBEd
     task tGUIMobd "Web GUI Design" {
-      effort 9d
-      actual:effort 15d
+      effort 8d
+      actual:effort 9d
       allocate dev3
       journalentry 2025-04-02 "The mobile desgin is done" {
         author dev3
@@ -163,12 +163,12 @@ task WMGame "Web & Mobile Game" {
       }
     }
     task tFMobC "Web Front End Construction" {
-      effort 15d
+      effort 7d
       allocate dev2, dev3
       depends WMGame.tMobF.tGUIMobd
     }
     task tFMobt "Web Front End Test" {
-      effort 6d
+      effort 3d
       allocate dev1
       depends WMGame.tMobF.tFMobC
     }    
