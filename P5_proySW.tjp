@@ -182,6 +182,7 @@ task WMGame "Web & Mobile Game" {
       depends WMGame.twebF
       depends WMGame.tback
       depends WMGame.tMobF
+      minstart 2025-06-10
       }
 
     
