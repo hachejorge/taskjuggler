@@ -68,6 +68,9 @@ resource dev2 "Samantha Müller" {
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
 }
+resource jorge "Jorge Hernández" {
+  email "872838@unizar.es"
+}
 
 # Now we specify the work packages. The whole project is described as
 # a task that contains subtasks. These subtasks are then broken down
@@ -100,12 +103,12 @@ task WMGame "Web & Mobile Game" {
     task tBEd "Back End General Design" {
       # The effort to finish this task is 5 man-days.
       effort 5d
-      allocate dev1
+      allocate dev1, jorge
     }
     task tlogic "Game logic" {
       effort 8d
       actual:effort 7d
-      allocate dev1, dev2
+      allocate dev1, dev2, jorge
       depends WMGame.tback.tBEd
       journalentry 2025-05-01 "Game logic completed before deadline" {
         author boss
@@ -115,7 +118,7 @@ task WMGame "Web & Mobile Game" {
     }
     task tbackDev "Back development" {
       effort 10d
-      allocate dev1, dev2
+      allocate dev1, dev2, jorge
       depends WMGame.tback.tlogic
     }
   }
