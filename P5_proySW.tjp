@@ -2,46 +2,27 @@
  * This file contains the practice 5 source code corresponding with the 
  * project planification using TaskJuggler in the "Proyecto Software" course.
  * It is based on the Tutorial project offered by TaskJuggler and maintains 
- * some elements of it
+ * some elements of it 
  */
 
 project pSix "Web Game"  2024-12-15 +5m {
   # Set the default time zone for the project. If not specified, UTC
   # is used. 
   timezone "Europe/Paris"
-  # Hide the clock time. Only show the date.
   timeformat "%Y-%m-%d"
-  # Use Euroepan format for numbers
   numberformat "-" "" "." "," 2
-  # Use Eurpean financial format for currency values. Don't show cents.
   currencyformat "-" "" "." "," 2
-  # Pick a day during the project that will be reported as 'today' in
-  # the project reports. If not specified, the current day will be
-  # used, but this will likely be outside of the project range, so it
-  # can't be seen in the reports.
-  now 2025-02-25-13:00
-  # The currency for all money values is the US Dollar.
+  now 2025-04-25-13:00
   currency "EUR"
 
-  # We want to compare the baseline scenario to one with the current one.
   scenario plan "Plan" {
     scenario actual "Actual"
   }
 }
 
-# This is not a real copyright for this file. It's just used as an example.
 copyright "Creative Commons 2025 Proyecto Software - Unizar."
-
-# The daily default rate of all resources. This can be overridden for each
-# resource. We specify this, so that we can do a good calculation of
-# the costs of the project.
 rate 145.2
 
-
-# In order to do a simple profit and loss analysis of the project we
-# specify accounts. One for the development costs, one for the
-# documentation costs, and one account to credit the customer payments
-# to.
 account cost "Project Cost" {
   account manag "Management"
   account wFront "Web Front-End"
@@ -49,12 +30,11 @@ account cost "Project Cost" {
   account back "Back-End"
 }
 account rev "Payments"
-# The Profit&Loss analysis should be rev - cost accounts.
 balance cost rev
 
 resource boss "Liz Bullock" {
   email "iiii@unizar.es"
-  actual:leaves project 2025-03-07 - 2025-04-12
+  actual:leaves project 2025-04-07 - 2025-05-12
   rate 160
 }
 resource dev1 "Paul Smith" {
@@ -63,25 +43,14 @@ resource dev1 "Paul Smith" {
 resource dev2 "Samantha Müller" {
   email "jjj@unizar.es"
   rate 100
-  actual:leaves project 2025-02-01 - 2025-02-28
+  actual:leaves project 2025-05-01 - 2025-05-28
 }
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
 }
 
-# Now we specify the work packages. The whole project is described as
-# a task that contains subtasks. These subtasks are then broken down
-# into smaller tasks and so on. The innermost tasks describe the real
-# work and have resources allocated to them. Many attributes of tasks
-# are inherited from the enclosing task. This saves you a lot of typing.
 task WMGame "Web & Mobile Game" {
-
-  # All work-related costs will be booked to this account unless the
-  # subtasks specify something different.
   chargeset manag
-  
-  # For the duration of the project we have running cost that are not
-  # included in the labor cost.
   charge 60 perday
   responsible boss
 
@@ -92,32 +61,47 @@ task WMGame "Web & Mobile Game" {
   }
 
   task tback "Back End" {
-    # It is necessary to “purge” the “chargeset” because it has been assigned previously to other variable 
     purge chargeset
     chargeset back
     responsible dev1
     depends WMGame.tgdesign
     task tBEd "Back End General Design" {
-      # The effort to finish this task is 5 man-days.
       effort 5d
       allocate dev1
     }
     task tlogic "Game logic" {
-      effort 12d
-      actual:effort 11d
+      effort 8d
+      actual:effort 7d
       allocate dev1, dev2
       depends WMGame.tback.tBEd
-      journalentry 2025-02-01 "Game logic completed before deadline" {
-        author boss
-        alert green
-        summary "The team has ended the game logic before deadline."
-      }
     }
     task tbackDev "Back development" {
-      effort 20d
+      effort 12d
       allocate dev1, dev2
       depends WMGame.tback.tlogic
     }
+  }
+
+  task tmobF "Mobile Front End" {
+    purge chargeset
+    chargeset mFront
+    responsible dev1
+    depends WMGame.tback.tBEd
+    task tMobGUId "Mobile GUI Design" {
+      effort 5d
+      actual:effort 6d
+      allocate dev1
+    }
+    task tMobFEc "Mobile Front End Construction" {
+      effort 12d
+      allocate dev1, dev2
+      depends WMGame.tmobF.tMobGUId
+    }
+    task tFEt "Web Front End Test" {
+      effort 3d
+      allocate dev1
+      depends WMGame.tmobF.tMobFEc
+    }    
   }
 
   task twebF "Web Front End" {
@@ -126,54 +110,54 @@ task WMGame "Web & Mobile Game" {
     responsible dev3
     depends WMGame.tback.tBEd
     task tGUId "Web GUI Design" {
-      effort 9d
-      actual:effort 15d
-      allocate dev3
-      journalentry 2025-01-15 "Problems with the GUI design tool" {
-        author dev3
-        alert yellow
-        summary "The tool used for the GUI design has given me a lot of problems. I recommend to look for other one."
-      }
+      effort 3d  
+      actual:effort 4d
+      allocate dev3, dev1  # Asignamos más recursos
     }
     task tFEc "Web Front End Construction" {
-      effort 15d
-      allocate dev2, dev3
+      effort 4d  # Reducido de 5d a 4d
+      allocate dev2, dev3  # Asignamos más recursos
       depends WMGame.twebF.tGUId
     }
     task tFEt "Web Front End Test" {
-      effort 6d
+      effort 2d
       allocate dev1
       depends WMGame.twebF.tFEc
     }    
   }
 
+
   task ttest "Acceptance tests" {
-      effort 10d
-      allocate boss
-      allocate dev2
-      actual:effort 20d
-      depends WMGame.twebF
-      depends WMGame.tback
-      }
+    effort 10d
+    allocate boss
+    allocate dev2
+    actual:effort 20d
+    depends WMGame.twebF
+    depends WMGame.tback
+    depends WMGame.tmobF
+    start 2025-05-30
+  }
 
-    
+  task backDeploy "Backend cloud deployment" {
+    allocate boss 
+    allocate dev1
+    depends WMGame.tback
+    task tEvaluateDeploymentOptions "Choose cloud deployment" {
+      effort 3d
+      actual: effort 2d
+    }
+    task tCompleteDeploy "Cloud complete deployment" {
+      effort 3d
+      actual: effort 2d
+    }
+  }
+
   task deliveries "Milestones" {
-
-    # Some milestones have customer payments associated with them. We
-    # credit these payments to the 'rev' account.
     purge chargeset
     chargeset rev
 
     task start "Project start" {
-      # A task that has no duration is a milestone. It only needs a
-      # start or end criterion. All other tasks depend on this task.
-      # Here we use the built-in macro ${projectstart} to align the
-      # start of the task with the above specified project time frame.
       start ${projectstart}
-  
-      # At the beginning of this task we receive a payment from the
-      # customer. This is credited to the account associated with this
-      # task when the task starts.
       charge 13000.0 onstart
     }
 
