@@ -63,7 +63,7 @@ resource dev1 "Paul Smith" {
 resource dev2 "Samantha Müller" {
   email "jjj@unizar.es"
   rate 100
-  actual:leaves project 2025-52-01 - 2025-05-28
+  actual:leaves project 2025-05-01 - 2025-05-28
 }
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
