@@ -70,6 +70,7 @@ resource dev3 "Peter Green" {
 }
 resource jorge "Jorge Hernández" {
   email "872838@unizar.es"
+  workinghours mon-fri 09:30-13:30
 }
 
 # Now we specify the work packages. The whole project is described as
