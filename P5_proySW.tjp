@@ -54,7 +54,7 @@ balance cost rev
 
 resource boss "Liz Bullock" {
   email "iiii@unizar.es"
-  actual:leaves project 2025-03-07 - 2025-04-12
+  actual:leaves project 2025-04-07 - 2025-04-12
   rate 160
 }
 resource dev1 "Paul Smith" {
@@ -107,7 +107,7 @@ task WMGame "Web & Mobile Game" {
       actual:effort 11d
       allocate dev1, dev2
       depends WMGame.tback.tBEd
-      journalentry 2025-02-01 "Game logic completed before deadline" {
+      journalentry 2025-05-01 "Game logic completed before deadline" {
         author boss
         alert green
         summary "The team has ended the game logic before deadline."
@@ -129,7 +129,7 @@ task WMGame "Web & Mobile Game" {
       effort 9d
       actual:effort 15d
       allocate dev3
-      journalentry 2025-01-15 "Problems with the GUI design tool" {
+      journalentry 2025-04-15 "Problems with the GUI design tool" {
         author dev3
         alert yellow
         summary "The tool used for the GUI design has given me a lot of problems. I recommend to look for other one."
