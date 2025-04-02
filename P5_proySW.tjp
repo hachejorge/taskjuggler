@@ -124,7 +124,7 @@ task WMGame "Web & Mobile Game" {
     purge chargeset
     chargeset mFront
     responsible dev1
-    depends VMGame.tback.tBEd
+    depends WMGame.tback.tBEd
     task tMobGUId "Mobile GUI Design" {
       effort 11d
       actual:effort 12d
@@ -187,7 +187,7 @@ task WMGame "Web & Mobile Game" {
   task backDeploy "Backend cloud deployment" {
     allocate boss 
     allocate dev1
-    depends VMGame.tback
+    depends WMGame.tback
     task tEvaluateDeploymentOptions "Choose cloud deployment" {
       effort 3d
       actual: effort 2d
