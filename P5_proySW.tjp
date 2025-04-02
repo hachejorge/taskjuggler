@@ -7,7 +7,7 @@
 
 project pSix "Web Game"  2024-12-15 +5m {
   # Set the default time zone for the project. If not specified, UTC
-  # is used.
+  # is used. 
   timezone "Europe/Paris"
   # Hide the clock time. Only show the date.
   timeformat "%Y-%m-%d"
